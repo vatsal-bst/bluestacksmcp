@@ -5,6 +5,7 @@ from .adb import (
     adb_uninstall,
     adb_logcat,
     adb_list_packages,
+    ensure_adb_ready,
 )
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "adb_uninstall", 
     "adb_logcat",
     "adb_list_packages",
+    "ensure_adb_ready",
 ]

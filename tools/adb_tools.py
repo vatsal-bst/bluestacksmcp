@@ -70,13 +70,13 @@ async def list_installed_apps() -> AppListResult:
     )
 
 async def get_error_logs(
-    lines: int = 500,
+    lines: int = 1000,
 ) -> ErrorLogsResult:
     """
     Get recent Android system logs (logcat).
 
     Args:
-        lines: Number of recent log lines to retrieve (default: 500)
+        lines: Number of recent log lines to retrieve (default: 1000)
 
     Returns:
         ErrorLogsResult with raw logcat output

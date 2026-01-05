@@ -33,6 +33,9 @@ from bluestacks import BluestacksAgent
 # Import configuration
 from mcp_config import config
 
+# Import utilities
+from utils import ensure_adb_ready
+
 # Import models
 from models import (
     TaskResult,
@@ -81,6 +84,9 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppContext]:
 
     Creates the agent on server startup and cleanly closes it on shutdown.
     """
+    # Ensure ADB is ready (will restart server if needed)
+    await ensure_adb_ready()
+
     # Create agent with configuration from environment
     agent_config = config.to_agent_config()
     agent = BluestacksAgent(agent_config, use_default_callbacks=False)
@@ -138,12 +144,12 @@ async def mcp_list_installed_apps() -> AppListResult:
     return await list_installed_apps()
 
 @mcp.tool()
-async def mcp_get_error_logs(lines: int = 500) -> ErrorLogsResult:
+async def mcp_get_error_logs(lines: int = 1000) -> ErrorLogsResult:
     """
     Get recent Android system logs (logcat).
 
     Args:
-        lines: Number of recent log lines (default: 500)
+        lines: Number of recent log lines (default: 1000)
     """
     return await get_error_logs(lines)
 
