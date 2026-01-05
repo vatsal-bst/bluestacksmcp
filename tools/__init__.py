@@ -26,8 +26,6 @@ from .core_tools import (
 
 from .smart_tools import (
     run_android_task,
-    resume_android_task,
-    stop_android_task,
     generate_test_report,
     test_feature,
 )
@@ -51,8 +49,6 @@ __all__ = [
     "get_ui_tree",
     # Smart tools
     "run_android_task",
-    "resume_android_task",
-    "stop_android_task",
     "generate_test_report",
     "test_feature",
 ]

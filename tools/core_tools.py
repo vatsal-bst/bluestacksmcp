@@ -15,7 +15,7 @@ These are tools directly exposed by the bluestacks agent sdk, including:
 """
 
 import base64
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from models import ToolResult, ScreenshotResult, UITreeResult
 
@@ -205,23 +205,33 @@ async def start_app(
 
 async def take_screenshot(
     agent: "BluestacksAgent",
+    path: Optional[str] = None,
 ) -> ScreenshotResult:
     """
     Capture a screenshot of the current emulator screen.
 
+    Args:
+        agent: The bluestacks agent instance
+        path: Optional local file path to save the screenshot (e.g., "screenshot.png")
+
     Returns:
-        ScreenshotResult with base64-encoded PNG image data
+        ScreenshotResult with base64 encoded PNG image and optional file path
 
     Note:
         - Screenshots are PNG format
     """
     try:
         png_bytes = await agent.take_screenshot()
+        base64_image = base64.b64encode(png_bytes).decode("utf-8")
+
+        if path:
+            with open(path, "wb") as f:
+                f.write(png_bytes)
 
         return ScreenshotResult(
             success=True,
-            image_base64=base64.b64encode(png_bytes).decode("utf-8"),
-            file_path=None,
+            image_base64=base64_image,
+            file_path=path,
         )
 
     except Exception as e:

@@ -1,7 +1,10 @@
 """
 Core LLM Task Tools
 
-Tools for running AI-driven autonomous tasks on the Android emulator.
+Tools for running AI-driven autonomous tasks on the Android emulator, including:
+- Running general Android tasks via natural language prompts
+- Generating comprehensive QA test reports for Android applications
+- Testing specific features within an Android app
 """
 
 from typing import TYPE_CHECKING, Optional
@@ -35,6 +38,8 @@ async def run_android_task(
         TaskResult with success status and output
     """
     result = await agent.run_task(query)
+
+    await agent.stop_task()
     
     return TaskResult(
         success=result.success,
@@ -42,62 +47,6 @@ async def run_android_task(
         error=result.reason if not result.success else "",
         error_code=result.error_code,
     )
-
-async def resume_android_task(
-    query: str,
-    agent: "BluestacksAgent",
-) -> TaskResult:
-    """
-    Continue a previously started task with additional instructions.
-    
-    Use this to provide follow-up commands, answer questions from the 
-    agent, or extend an ongoing workflow. The agent maintains context
-    from the previous run_android_task call.
-    
-    Args:
-        query: Follow-up instruction or answer to agent's question.
-               Examples:
-               - "Now click the Submit button"
-               - "Yes, accept the terms and continue"
-               - "Go back and try the other option"
-               
-    Returns:
-        TaskResult with success status and output
-    """
-    result = await agent.resume_task(query)
-    
-    return TaskResult(
-        success=result.success,
-        output=result.output if result.success else "",
-        error=result.reason if not result.success else "",
-        error_code=result.error_code,
-    )
-
-async def stop_android_task(
-    agent: "BluestacksAgent",
-) -> TaskResult:
-    """
-    Stop the currently running task.
-    
-    Use this to abort a long-running task or cancel an operation
-    that is no longer needed.
-    
-    Returns:
-        TaskResult indicating the task was stopped
-    """
-    try:
-        await agent.stop_task()
-        return TaskResult(
-            success=True,
-            output="Task stopped successfully",
-            error="",
-        )
-    except Exception as e:
-        return TaskResult(
-            success=False,
-            output="",
-            error=str(e),
-        )
 
 async def generate_test_report(
     app_name: str,
@@ -138,6 +87,8 @@ async def generate_test_report(
     
     # Run the autonomous testing task
     result = await agent.run_task(prompt)
+
+    await agent.stop_task()
     
     if result.success:
         return TestReportResult(
@@ -199,6 +150,8 @@ async def test_feature(
     
     # Run the feature testing task
     result = await agent.run_task(prompt)
+
+    await agent.stop_task()
     
     if result.success:
         return TestReportResult(

@@ -61,8 +61,6 @@ from tools import (
     take_screenshot,
     get_ui_tree,
     run_android_task,
-    resume_android_task,
-    stop_android_task,
     generate_test_report,
     test_feature,
 )
@@ -251,22 +249,25 @@ async def mcp_start_app(package: str, activity: str) -> ToolResult:
 
     Args:
         package: Package name (e.g., "com.android.settings")
-        activity: Activity name
+        activity: Activity name (e.g., "com.android.settings.SettingsActivity")
     """
     ctx = mcp.get_context()
     agent = ctx.request_context.lifespan_context.agent
     return await start_app(package, activity, agent)
 
 @mcp.tool()
-async def mcp_take_screenshot() -> ScreenshotResult:
+async def mcp_take_screenshot(path: Optional[str] = None) -> ScreenshotResult:
     """
     Capture a screenshot of the current emulator screen.
+
+    Args:
+        path: Optional local file path to save the screenshot (e.g., "screenshot.png")
 
     Useful for visual verification and debugging.
     """
     ctx = mcp.get_context()
     agent = ctx.request_context.lifespan_context.agent
-    return await take_screenshot(agent)
+    return await take_screenshot(agent, path)
 
 @mcp.tool()
 async def mcp_get_ui_tree() -> UITreeResult:
@@ -300,32 +301,6 @@ async def mcp_run_android_task(query: str) -> TaskResult:
     ctx = mcp.get_context()
     agent = ctx.request_context.lifespan_context.agent
     return await run_android_task(query, agent)
-
-@mcp.tool()
-async def mcp_resume_android_task(query: str) -> TaskResult:
-    """
-    Continue a previously started task with additional instructions.
-
-    Use this to provide follow-up commands, answer questions from the 
-    agent, or extend an ongoing workflow.
-
-    Args:
-        query: Follow-up instruction or answer to agent's question.
-    """
-    ctx = mcp.get_context()
-    agent = ctx.request_context.lifespan_context.agent
-    return await resume_android_task(query, agent)
-
-@mcp.tool()
-async def mcp_stop_android_task() -> TaskResult:
-    """
-    Stop the currently running task.
-
-    Use this to abort a long-running task or cancel an operation.
-    """
-    ctx = mcp.get_context()
-    agent = ctx.request_context.lifespan_context.agent
-    return await stop_android_task(agent)
 
 @mcp.tool()
 async def mcp_generate_test_report(

@@ -27,7 +27,8 @@ class ToolResult(BaseModel):
 class ScreenshotResult(BaseModel):
     """Result from taking a screenshot."""
     success: bool = Field(description="Whether screenshot was captured")
-    image_base64: str = Field(default="", description="Base64-encoded PNG image")
+    image_base64: str = Field(default="", description="Base64 encoded PNG image")
+    file_path: Optional[str] = Field(default=None, description="Path to the saved image file if requested")
     error: str = Field(default="", description="Error message if failed")
 
 
