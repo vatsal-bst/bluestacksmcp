@@ -154,6 +154,16 @@ def build_feature_test_prompt(
 
 **Objective:** Thoroughly test this specific feature and generate a focused test report.
 
+**CRITICAL RULES**
+
+1. **Text Field Handling**
+    **Before entering ANY text in ANY input field throughout testing:**
+    - **ALWAYS clear the field first** — select all text and delete, or clear the field completely
+    - **Verify the field is empty** before typing new content
+    - **Do NOT assume fields are empty** — previous test data may persist
+
+    This applies to: login fields, search fields, form inputs, dialogs with text fields, etc.
+
 **Testing Approach:**
 
 1. **Navigate to Feature:**
