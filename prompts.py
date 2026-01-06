@@ -33,203 +33,44 @@ Use this context to prioritize testing relevant features and workflows.
 
 **App Under Test:** {app_name}
 {context_section}
-**Objective:** Execute a comprehensive QA workflow on this application and generate a structured test report. Follow the login-first → navigation → interactions testing sequence.
+**Objective:** Execute a comprehensive QA workflow on this Android application and generate a structured test report.
 
----
+**Testing Protocol:**
 
-## ⚠️ CRITICAL RULES
+**Phase 1: Launch & Initialization**
+1. Launch the app from a cold state
+2. Measure approximate time-to-interactive
+3. Verify the main screen loads without errors
+4. Check for any startup dialogs, permissions, or onboarding flows
 
-### Text Field Handling
-**Before entering ANY text in ANY input field throughout testing:**
-1. **ALWAYS clear the field first** — select all text and delete, or clear the field completely
-2. **Verify the field is empty** before typing new content
-3. **Do NOT assume fields are empty** — previous test data may persist
+**Phase 2: Core Navigation**
+1. Identify and navigate to all main screens/tabs
+2. Test the back button behavior from each screen
+3. Verify navigation transitions are smooth
+4. Check that the home/main screen is always accessible
 
-This applies to: login fields, search fields, form inputs, dialogs with text fields, etc.
+**Phase 3: User Interactions**
+1. Test all visible buttons and tappable elements
+2. Test any input fields with valid data
+3. Test scrolling in lists or content areas
+4. Test any pull-to-refresh functionality if present
+5. Test any floating action buttons or menus
 
-### Destructive Actions — SAVE FOR LAST
-**The following actions should ONLY be performed at the very end, after all other testing is complete:**
-- Logout / Sign out
-- Delete account
-- Clear all data / Reset app
-- Uninstall or disable features
-- Any action that would end the session or require re-authentication
+**Phase 4: Edge Cases & Error Handling**
+1. Test input fields with empty/blank input
+2. Test rapid consecutive taps
+3. Test navigation during loading states
+4. Look for any UI glitches, overlapping text, or layout issues
 
-**Rationale:** Performing these early will disrupt the testing flow and require re-login/re-setup.
-
-### Hidden Content Discovery
-**On EVERY screen, scroll to check for content below the fold:**
-- Scroll down to reveal hidden elements, buttons, or sections
-- Scroll up to ensure nothing is hidden above
-- Check for horizontal scroll areas (carousels, tabs)
-- Look for expandable sections or "show more" buttons
-- Test any discovered hidden elements before moving to the next screen
-
----
-
-## PHASE 1: AUTHENTICATION FLOW (Priority: Critical)
-
-**If the app has a login/signup screen, test it FIRST with negative cases before successful login.**
-
-### 1.1 Negative Test Cases — Execute Before Valid Login
-
-**⚠️ IMPORTANT: Clear ALL input fields before EACH test case below.**
-
-| Test Type | Pre-Action | Action | Expected Behavior |
-|-----------|------------|--------|-------------------|
-| Empty submission | Clear all fields | Submit with all fields empty | Validation errors for required fields |
-| Invalid format | Clear all fields | Enter malformed email/username | Format validation error shown |
-| Short password | Clear all fields | Enter password below minimum length | Password length error shown |
-| Wrong credentials | Clear all fields | Enter incorrect but valid-format credentials | Error message displayed (no crash) |
-
-### 1.2 Positive Test Cases
-
-| Test Type | Pre-Action | Action | Expected Behavior |
-|-----------|------------|--------|-------------------|
-| Valid login | **Clear all fields first** | Enter correct credentials and submit | Navigate to main/home screen |
-| Loading state | - | Observe during authentication | Loading indicator visible |
-| Password visibility | - | Toggle password visibility if available | Text shows/hides correctly |
-
-### 1.3 Post-Login Verification
-- Verify user info displayed correctly on main screen
-- Confirm session is established
-
-**⚠️ If no authentication screen exists, skip to Phase 2.**
-
----
-
-## PHASE 2: CORE NAVIGATION
-
-### 2.1 Primary Navigation
-- Identify main navigation (bottom nav, tabs, drawer, etc.)
-- Test each navigation item — verify correct screen loads
-- Test back button from each screen
-- Verify smooth transitions between screens
-
-### 2.2 Secondary Navigation
-- Test app bar buttons (profile, settings, notifications, etc.)
-- Test any floating action buttons
-- Test menu items and overflow menus
-- **⚠️ Do NOT tap logout/sign-out buttons yet**
-
-### 2.3 Screen Exploration
-- **Scroll each screen fully** to discover all content
-- Note any elements that only appear after scrolling
-- Check for sticky headers/footers
-- Look for pull-to-refresh indicators
-
-### 2.4 Navigation Edge Cases
-- Rapid switching between screens
-- Navigate during loading states
-- Deep navigation and back out
-
----
-
-## PHASE 3: INTERACTIVE ELEMENTS
-
-**For each main screen discovered, test all interactive elements:**
-
-### 3.1 Discovery — Scroll First
-Before testing interactions on any screen:
-1. **Scroll to the bottom** of the screen
-2. **Scroll back to the top**
-3. Note ALL interactive elements visible throughout the scroll
-4. Check for lazy-loaded content that appears while scrolling
-
-### 3.2 Buttons & Tappables
-- Tap all visible buttons and verify response
-- Tap cards, list items, icons that appear interactive
-- Test floating action buttons and their menus
-- **Skip any logout/delete/destructive buttons**
-
-### 3.3 Input Fields
-
-**⚠️ For EVERY input field test:**
-1. **Clear the field before entering new text**
-2. Enter test data
-3. Verify the input is accepted/displayed correctly
-4. **Clear again before the next test**
-
-| Test Type | Pre-Action | Action | Verify |
-|-----------|------------|--------|--------|
-| Text entry | Clear field | Enter valid text | Text displays correctly |
-| Search | Clear field | Enter search query | Results or behavior triggered |
-| Special chars | Clear field | Enter special characters | Handled gracefully |
-
-### 3.4 Dialogs & Menus
-- Open all dialogs and menus
-- **Clear any text fields in dialogs before entering data**
-- Test all options within dialogs
-- Verify dialogs dismiss correctly (back button, tap outside)
-- **Skip any destructive options (delete, clear all, etc.) for now**
-
-### 3.5 Gestures
-- Scroll lists and content areas
-- Pull-to-refresh where applicable
-- Swipe actions on list items
-- Long-press for context menus
-
-### 3.6 Hidden Features Check
-- Expand any collapsed sections
-- Tap "Show more" or "View all" links
-- Check settings screens for additional options (scroll!)
-- Look for easter eggs or hidden debug menus
-
----
-
-## PHASE 4: VALUE & STATE MONITORING
-
-### 4.1 Track Dynamic Values
-- Identify any counters, statistics, or numbers displayed
-- Note their initial values
-
-### 4.2 Test State Changes
-- Perform actions that should change values (add, delete, increment)
-- Verify values update correctly after each action
-- Navigate away and back — verify persistence
-- Test reset/clear functionality if available
-
-### 4.3 Log Changes
-Document: Action → Value Before → Value After → Expected → Match?
-
----
-
-## PHASE 5: EDGE CASES & STABILITY
-
-### 5.1 Error Handling
-- Submit empty forms
-- Enter maximum length text (**clear field first**)
-- Test rapid consecutive taps
-
-### 5.2 Stability
-- Monitor for crashes throughout testing
-- Note any freezes or unresponsive moments
-- Check for UI glitches (overlapping text, clipped elements)
-
----
-
-## PHASE 6: DESTRUCTIVE ACTIONS (Execute LAST)
-
-**⚠️ Only perform these after ALL other testing is complete.**
-
-### 6.1 Data Clearing
-- Test "Clear all" or "Reset" options
-- Verify data is actually cleared
-- Note if confirmation dialogs appear
-
-### 6.2 Logout Flow
-- Tap logout/sign-out button
-- Verify session ends correctly
-- Confirm return to login screen
-- Verify no user data persists after logout
-
-### 6.3 Re-authentication (Optional)
-- Attempt to log back in after logout
-- Verify fresh login works correctly
-
+**Phase 5: Stability Assessment**
+1. Monitor for any crashes or ANRs (App Not Responding)
+2. Note any freezes or unresponsive moments
+3. Check memory behavior (if app becomes sluggish)
 ---
 
 **REQUIRED OUTPUT FORMAT:**
+
+You MUST compile your findings into the following Markdown report structure:
 
 # 📱 {app_name} - QA Test Report
 
@@ -242,71 +83,42 @@ Document: Action → Value Before → Value After → Expected → Match?
 | **Tests Executed** | [Number] |
 | **Pass Rate** | [X/Y] ([Percentage]%) |
 
-### Category Breakdown
-| Category | Passed | Failed |
-|----------|--------|--------|
-| Authentication | [X] | [Y] |
-| Navigation | [X] | [Y] |
-| Interactions | [X] | [Y] |
-| State/Values | [X] | [Y] |
-| Destructive Actions | [X] | [Y] |
+## 2. Test Results
 
-## 2. Authentication Results
-| TC-ID | Test Case | Expected | Actual | Status |
-|-------|-----------|----------|--------|--------|
-| AUTH-01 | Empty form submission | Validation errors | [Observed] | PASS/FAIL |
-| AUTH-02 | Invalid email format | Format error | [Observed] | PASS/FAIL |
-| AUTH-03 | Wrong credentials | Error message | [Observed] | PASS/FAIL |
-| AUTH-04 | Valid login | Navigate to home | [Observed] | PASS/FAIL |
-| ... |
+| TC-ID | Feature Area | Test Action | Expected Result | Actual Result | Status |
+|-------|--------------|-------------|-----------------|---------------|--------|
+| TC-001 | Launch | Cold start app | App loads < 5s | [Observation] | PASS/FAIL |
+| TC-002 | Navigation | Navigate to main screens | All screens accessible | [Observation] | PASS/FAIL |
+| TC-003 | Interaction | Tap primary buttons | Buttons respond correctly | [Observation] | PASS/FAIL |
+| TC-004 | Input | Enter text in fields | Text accepted | [Observation] | PASS/FAIL |
+| TC-005 | Scrolling | Scroll content areas | Smooth scrolling | [Observation] | PASS/FAIL |
+| TC-006 | Back Navigation | Press back button | Returns to previous screen | [Observation] | PASS/FAIL |
+| [Continue for all tests...] |
 
-## 3. Navigation Results
-| TC-ID | Test Case | Expected | Actual | Status |
-|-------|-----------|----------|--------|--------|
-| NAV-01 | [Screen navigation] | Loads correctly | [Observed] | PASS/FAIL |
-| ... |
+## 3. Defects Found
 
-## 4. Interaction Results
-| TC-ID | Screen | Element | Action | Result | Status |
-|-------|--------|---------|--------|--------|--------|
-| INT-01 | [Screen] | [Element] | [Action] | [Result] | PASS/FAIL |
-| ... |
+If no defects found, state: "✅ No critical defects found during testing."
 
-## 5. Hidden Features Discovered
-| Screen | Element/Feature | Location | Tested | Status |
-|--------|-----------------|----------|--------|--------|
-| [Screen] | [Feature found by scrolling] | [Below fold / Collapsed] | Yes/No | PASS/FAIL |
-| ... |
-
-## 6. Value Monitoring Log
-| Action | Before | After | Expected | Match |
-|--------|--------|-------|----------|-------|
-| [Action] | [Val] | [Val] | [Val] | ✅/❌ |
-| ... |
-
-## 7. Destructive Actions Results
-| TC-ID | Test Case | Expected | Actual | Status |
-|-------|-----------|----------|--------|--------|
-| DEST-01 | Logout | Return to login | [Observed] | PASS/FAIL |
-| ... |
-
-## 8. Defects Found
-
-✅ No critical defects found during testing.
-
-*OR for each defect:*
-
-### 🐛 BUG-001: [Title]
+For each defect:
+### 🐛 BUG-[ID]: [Brief Title]
 - **Severity:** [Critical / High / Medium / Low]
 - **Steps to Reproduce:**
-  1. [Step]
-  2. [Step]
+  1. [Step 1]
+  2. [Step 2]
+  3. [Error occurs]
 - **Expected:** [What should happen]
-- **Actual:** [What happened]
+- **Actual:** [What actually happened]
 
-## 9. Recommendations
-1. [Recommendation]
-2. [Recommendation]
+## 4. UX & Performance Observations
+- **Load Time:** [Comments on app startup speed]
+- **Responsiveness:** [Comments on touch response and animations]
+- **Layout:** [Comments on UI layout, text readability, element spacing]
+- **Stability:** [Comments on crashes, freezes, or memory issues]
+
+## 5. Recommendations
+- [Recommendation 1]
+- [Recommendation 2]
+- [...]
 
 ---
 *Report generated by BlueStacks MCP QA Agent*
