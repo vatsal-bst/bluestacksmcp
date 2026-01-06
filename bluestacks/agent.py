@@ -49,8 +49,8 @@ DEFAULT_LLM_CONFIG: Dict[str, Any] = {
     "model": "gemini-3-flash-preview",
     "temperature": 1.0,
     "max_tokens": 10000,
-    "max_steps": 50,
-    "timeout": 1000,
+    "max_steps": 25,
+    "timeout": 300,
     "vision": True,
     "accessibility": True
 }
@@ -436,12 +436,8 @@ class BluestacksAgent:
 
         payload: Dict[str, Any] = {}
 
-        if self.config.instance_config:
-            payload.update(self.config.instance_config)
-
         # Defaults if not provided
-        payload.setdefault("ui", True)
-        payload.setdefault("input", False)
+        payload.setdefault("mode", "agent")
 
         self._logger.info("Creating new session via /v1/session/create")
         if self._print_progress_to_console:
@@ -521,8 +517,11 @@ class BluestacksAgent:
         payload = {
             "session_id": session_id,
             "query": query,
-            "timeout": self.config.task_timeout,
             "llm": self.llm_config,
+            "metadata": {
+                "timeout": self.config.task_timeout,
+                "grid_config": self.config.metadata.get("grid_config"),
+            },
         }
 
         self._logger.info("Starting task with query: %s", query)
@@ -834,31 +833,6 @@ class BluestacksAgent:
                 )
                 self._pending_turn_future.set_result(result)
 
-        elif event_name == "task_failed":
-            reason = payload.get("reason") or payload.get("message", "Task failed")
-            error_code = payload.get("error") or "task_failed"
-            self._logger.error(
-                "Task turn failed: task_id=%s reason=%s",
-                self._current_task_id,
-                reason,
-            )
-            if (
-                self._pending_turn_future is not None
-                and not self._pending_turn_future.done()
-            ):
-                result = RunResult(
-                    success=False,
-                    output="",
-                    reason=reason,
-                    error_code=error_code,
-                    needs_input=False,
-                    input_prompt=None,
-                    responses=responses,
-                    delta=delta,
-                    raw=event,
-                )
-                self._pending_turn_future.set_result(result)
-
     async def _wait_for_turn_completion(self) -> RunResult:
         """
         Wait for the next "task_completed" or "task_failed" event, or for
@@ -1053,13 +1027,11 @@ class BluestacksAgent:
         finally:
             self._pending_turn_future = None
 
-
     def submit_input_async(self, text: str) -> None:
         """
         Fire-and-forget submit input (safe to call from SSE callbacks).
         """
         asyncio.create_task(self.submit_input(text))
-
 
     async def submit_input(self, text: str) -> None:
         if self._session_id is None or self._current_task_id is None:
@@ -1081,6 +1053,16 @@ class BluestacksAgent:
         """
         self._logger.info("Stopping current task: task_id=%s", self._current_task_id)
         self._stop_stream = True
+
+        if self._session_id is not None and self._current_task_id is not None:
+            payload = {
+                "session_id": self._session_id,
+                "task_id": self._current_task_id,
+            }
+            try:
+                _ = await self._post("/v1/task/close", payload)
+            except Exception as e:
+                self._logger.warning("Error while sending task close request: %s", e)
 
         if self._event_stream_task is not None and not self._event_stream_task.done():
             try:

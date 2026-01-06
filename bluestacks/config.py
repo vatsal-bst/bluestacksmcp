@@ -20,30 +20,29 @@ class BluestacksAgentConfig:
             "accessibility": true
         }
 
-    instance_config example:
-        {
-            "instance_id": "Pie64"
-        }
-
     metadata example:
         {
-            "sdk_logging_level": "info",
+            "helper_base_url": "http://localhost:8080",
+            "sdk_log_to_console": false,
+            "sdk_console_log_level": "INFO",
             "helper_logging_level": "debug",
-            "screenshot_path": "/tmp/agent_screenshot.png"
+            "screenshot_path": "/tmp/agent_screenshot.png",
+            "grid_config": {
+                "enabled": true,
+                "color": "#FF0000",
+                "columns": 36,
+                "rows": 27,
+                "font_color": "#FFFFFF"
+            },
         }
 
     The SDK also exposes some behavioral values:
         - request_timeout: HTTP timeout (seconds) for each request
         - task_timeout: timeout passed to /v1/task/start (seconds)
-        - status_poll_interval: how often to poll /v1/task/status (seconds)
-        - status_max_wait: max total time to wait for a task (seconds)
     """
 
     llm_config: Dict[str, Any] = field(default_factory=dict)
-    instance_config: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     request_timeout: float = 60.0
-    task_timeout: int = 300
-    status_poll_interval: float = 1.0
-    status_max_wait: float = 300.0
+    task_timeout: int = 1200
