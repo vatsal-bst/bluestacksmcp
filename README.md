@@ -4,7 +4,7 @@ An MCP (Model Context Protocol) server that enables AI assistants to control and
 
 ## Overview
 
-![BlueStacks MCP Overview](https://drive.google.com/uc?export=view&id=1dtahwJrOKcIt6p658u7t70kZKGz3k4R_)
+**📊 [View Project Overview Diagram](https://drive.google.com/file/d/1dtahwJrOKcIt6p658u7t70kZKGz3k4R_/view?usp=sharing)**
 
 ## Features
 
