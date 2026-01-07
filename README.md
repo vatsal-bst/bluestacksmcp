@@ -4,9 +4,9 @@ An MCP (Model Context Protocol) server that enables AI assistants to control and
 
 ## Overview
 
-**📊 [View Project Overview Diagram](https://drive.google.com/file/d/1dtahwJrOKcIt6p658u7t70kZKGz3k4R_/view?usp=sharing)**
+**📊 [View Project Overview Diagram](https://drive.google.com/file/d/1DhFpfQyZCWHB5-o-GCl_IKLRIBz0IL6f/view?usp=sharing)**
 
-**📊 [View Detailed Project Presentation](https://drive.google.com/file/d/1WMxeqq08r3ZgUDxD_hS3PAJKgDs-vj1T/view?usp=sharing)**
+**📊 [View Detailed Project Presentation](https://drive.google.com/file/d/1iJftOeBjWQYnjggbLqNYJnDSzG6zUAvn/view?usp=sharing)**
 
 ## Features
 
@@ -229,8 +229,8 @@ To see the BlueStacks MCP in action, we've created a **sample Flutter app** that
 This simple Flutter app is used to demonstrate the MCP server's capabilities. Check out these demo videos showing the complete workflow:
 
 **📹 Demo Videos:**
-- [Demo 1](https://drive.google.com/file/d/1sivK2yg_MvB39nlqYUXzM2tXBUMX4QBb/view?usp=drive_link) - Vibe coding an app feature and automated testing
-- [Demo 2](https://drive.google.com/file/d/1JedzlSKOwRwyDB6aevSwiSMXStnB2Nq2/view?usp=drive_link) - Generate comprehensive test report for the app
+- [Demo 1](https://drive.google.com/file/d/18YsNYWho4HK9AVTPaNpdbiVm_JCzIGPz/view?usp=sharing) - Vibe coding an app feature and automated testing
+- [Demo 2](https://drive.google.com/file/d/1cUwjE-xrNUTMsGbLqgBO9c93RLy4CLRx/view?usp=sharing) - Generate comprehensive test report for the app
 
 These demos showcase how the MCP server can:
 - Automate testing of Flutter applications on BlueStacks emulator
