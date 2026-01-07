@@ -2,6 +2,10 @@
 
 An MCP (Model Context Protocol) server that enables AI assistants to control and test Android applications on BlueStacks emulator.
 
+## Overview
+
+![BlueStacks MCP Overview](https://drive.google.com/uc?export=view&id=1dtahwJrOKcIt6p658u7t70kZKGz3k4R_)
+
 ## Features
 
 - 🤖 AI-powered Android automation via natural language
@@ -211,3 +215,23 @@ Create `.vscode/mcp.json` in your workspace or add to user settings:
 - `mcp_run_android_task` - Execute complex tasks via natural language
 - `mcp_generate_test_report` - Generate comprehensive QA report
 - `mcp_test_feature` - Test a specific app feature
+
+---
+
+## Sample Use Case
+
+To see the BlueStacks MCP in action, we've created a **sample Flutter app** that serves as a test application:
+
+**🔗 [mcpFlutterSample](https://github.com/Sankalp-bst/mcpFlutterSample)**
+
+This simple Flutter app is used to demonstrate the MCP server's capabilities. Check out these demo videos showing the complete workflow:
+
+**📹 Demo Videos:**
+- [Demo 1](https://drive.google.com/file/d/1sivK2yg_MvB39nlqYUXzM2tXBUMX4QBb/view?usp=drive_link) - Vibe coding an app feature and automated testing
+- [Demo 2](https://drive.google.com/file/d/1JedzlSKOwRwyDB6aevSwiSMXStnB2Nq2/view?usp=drive_link) - Generate comprehensive test report for the app
+
+These demos showcase how the MCP server can:
+- Automate testing of Flutter applications on BlueStacks emulator
+- Perform AI-powered interactions and validations
+- Generate comprehensive QA reports
+- Test specific features and workflows
