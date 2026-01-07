@@ -5,6 +5,7 @@ An MCP (Model Context Protocol) server that enables AI assistants to control and
 ## Overview
 
 **📊 [View Project Overview Diagram](https://drive.google.com/file/d/1dtahwJrOKcIt6p658u7t70kZKGz3k4R_/view?usp=sharing)**
+**📊 [Detailed View](https://drive.google.com/file/d/1WMxeqq08r3ZgUDxD_hS3PAJKgDs-vj1T/view?usp=sharing)**
 
 ## Features
 
